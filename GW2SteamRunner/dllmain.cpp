@@ -19,8 +19,7 @@ void startRunner() {
     TCHAR buffer[MAX_PATH];
     DWORD len = GetCurrentDirectory(MAX_PATH, buffer);
     std::wstring quote = L"\"";
-    //std::wstring arg = L" 1284210";
-    std::wstring arg = L" 4000";
+    std::wstring arg = L" 1284210";
     std::wstring relative = L"\\addons\\gw2_steam_runner\\steam-idle\\steam-idle.exe";
     std::wstring working = buffer;
 
