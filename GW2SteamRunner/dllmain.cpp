@@ -35,6 +35,12 @@ void startRunner() {
     CreateProcess(exec.c_str(), (LPWSTR)cmd.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &process_information);
 }
 
+void endRunner() {
+    TerminateProcess(process_information.hProcess, 0);
+    CloseHandle(process_information.hThread);
+    CloseHandle(process_information.hProcess);
+}
+
 gw2al_addon_dsc* gw2addon_get_description()
 {
     return &gAddonDsc;
@@ -43,7 +49,6 @@ gw2al_addon_dsc* gw2addon_get_description()
 gw2al_api_ret gw2addon_load(gw2al_core_vtable* core_api)
 {
     gAPI = core_api;
-    startRunner();
     gAPI->log_text(LL_INFO, gAddonDsc.name, (wchar_t*)L"Started steam-idle process");
     return GW2AL_OK;
 }
@@ -51,17 +56,16 @@ gw2al_api_ret gw2addon_load(gw2al_core_vtable* core_api)
 gw2al_api_ret gw2addon_unload(int gameExiting)
 {
     gAPI->log_text(LL_INFO, gAddonDsc.name, (wchar_t*)L"Stopping steam-idle process");
-    TerminateProcess(process_information.hProcess, 0);
-    CloseHandle(process_information.hThread);
-    CloseHandle(process_information.hProcess);
     return GW2AL_OK;
 }
 
 bool WINAPI DllMain(HMODULE hModule, DWORD  fdwReason, LPVOID lpReserved) {
     switch (fdwReason) {
         case DLL_PROCESS_ATTACH:
+            startRunner();
             break;
         case DLL_PROCESS_DETACH:
+            endRunner();
             break;
     }
     return TRUE;
