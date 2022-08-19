@@ -31,8 +31,9 @@ void startRunner() {
     STARTUPINFO si;
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
+    si.dwFlags = STARTF_USESHOWWINDOW;
     ZeroMemory(&process_information, sizeof(process_information));
-    CreateProcess(exec.c_str(), (LPWSTR)cmd.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &process_information);
+    CreateProcess(exec.c_str(), (LPWSTR)cmd.c_str(), NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &process_information);
 }
 
 void endRunner() {
