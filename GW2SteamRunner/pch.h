@@ -9,5 +9,6 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include "gw2_al.h"
 
 #endif //PCH_H
