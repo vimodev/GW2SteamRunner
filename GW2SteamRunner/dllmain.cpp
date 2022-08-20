@@ -1,75 +1,54 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 
-gw2al_core_vtable* gAPI;
 gw2al_addon_dsc  gAddonDsc = { L"gw2_steam_runner", L"Tells Steam Guild Wars 2 is running.", 0, 1, 1, NULL };
 gw2al_addon_dsc* gw2addon_get_description() { return &gAddonDsc; }
-gw2al_api_ret gw2addon_load(gw2al_core_vtable* core_api) {
-    gAPI = core_api;
-    gAPI->log_text(LL_INFO, gAddonDsc.name, (wchar_t*)L"Started steam-idle process");
-    return GW2AL_OK;
-}
-gw2al_api_ret gw2addon_unload(int gameExiting) {
-    gAPI->log_text(LL_INFO, gAddonDsc.name, (wchar_t*)L"Stopping steam-idle process");
-    return GW2AL_OK;
-}
+gw2al_api_ret gw2addon_load(gw2al_core_vtable* core_api) { return GW2AL_OK;}
+gw2al_api_ret gw2addon_unload(int gameExiting) { return GW2AL_OK; }
 
-std::wstring appid_path = L"\\addons\\gw2_steam_runner\\appid.cfg";
-std::wstring idle_path = L"\\addons\\gw2_steam_runner\\steam-idle\\steam-idle.exe";
-PROCESS_INFORMATION process_information;
+/**
+* Initialize the Steam API
+*/
+void enable_steam() {
 
-void startRunner() {
+    // File containing app id to use (1284210 for Guild Wars 2 (default))
+    std::wstring appid_path = L"\\addons\\gw2_steam_runner\\appid.cfg";
+    // Library with Steam API
+    std::wstring steam_api_path = L"\\addons\\gw2_steam_runner\\steam_api64.dll";
 
-    // Get current working directory
-    TCHAR current_dir[MAX_PATH];
-    DWORD len = GetCurrentDirectory(MAX_PATH, current_dir);
+    // Get working directory
+    TCHAR buffer[MAX_PATH];
+    DWORD len = GetCurrentDirectory(MAX_PATH, buffer);
+    std::wstring current_dir = buffer;
 
-    // Load config
+    // Read app id from appid file
     std::ifstream ifs(current_dir + appid_path);
     std::string appid((std::istreambuf_iterator<char>(ifs)),
         (std::istreambuf_iterator<char>()));
     std::wstring appidw(appid.begin(), appid.end());
-    
-    // Formulate steam-idle command
-    std::wstring quote = L"\"";
-    std::wstring arg = ((std::wstring)L" ") + appidw;
-    std::wstring working = current_dir;
-    std::wstring exec = current_dir + idle_path;
-    std::wstring cmd = quote + exec + quote + arg;
 
-    // Start the steam-idle process
-    STARTUPINFO si;
-    ZeroMemory(&si, sizeof(si));
-    si.cb = sizeof(si);
-    si.dwFlags = STARTF_USESHOWWINDOW; // Process should look at the SHOWWINDOW flags passed below
-    ZeroMemory(&process_information, sizeof(process_information));
-    CreateProcess(exec.c_str(), (LPWSTR)cmd.c_str(), NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &process_information);
+    // Set the SteamAppId environment variable to the app id, Steam API will read this
+    SetEnvironmentVariable(L"SteamAppId", appidw.c_str());
 
-}
+    // Load the Steam API's init function
+    std::wstring dll_path = current_dir + steam_api_path;
+    HMODULE steam_api = LoadLibrary(dll_path.c_str());
+    typedef bool (*SteamAPI_Init_Proc)();
+    SteamAPI_Init_Proc steam_api_init = (SteamAPI_Init_Proc)GetProcAddress(steam_api, "SteamAPI_Init");
 
-void stopRunner() {
-
-    // Kill the process
-    TerminateProcess(process_information.hProcess, 0);
-    // Close handles
-    CloseHandle(process_information.hThread);
-    CloseHandle(process_information.hProcess);
+    // Initialize the Steam API
+    steam_api_init();
 
 }
 
 bool WINAPI DllMain(HMODULE hModule, DWORD  fdwReason, LPVOID lpReserved) {
-
     switch (fdwReason) {
-        // Start steam-idle on library load
         case DLL_PROCESS_ATTACH:
-            startRunner();
+            enable_steam();
             break;
-        // Stop steam-idle on library free
         case DLL_PROCESS_DETACH:
-            stopRunner();
             break;
     }
     return TRUE;
-
 }
 

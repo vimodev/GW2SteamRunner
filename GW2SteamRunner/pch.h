@@ -12,10 +12,8 @@
 #include "gw2_al.h"
 #include <Windows.h>
 #include <stdlib.h>
-#include <processthreadsapi.h>
 #include <cstdlib>
 #include <string>
 #include <fstream>
-#include <iostream>
 
 #endif //PCH_H
