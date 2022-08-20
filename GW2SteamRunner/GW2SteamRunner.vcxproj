@@ -74,6 +74,10 @@
     <TargetName>gw2addon_gw2_steam_runner</TargetName>
     <OutDir>C:\Games\Guild Wars 2\addons\gw2_steam_runner</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>C:\Games\Guild Wars 2\addons\gw2_steam_runner</OutDir>
+    <TargetName>gw2addon_gw2_steam_runner</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

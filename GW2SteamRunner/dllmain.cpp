@@ -1,10 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-#include <Windows.h>
-#include <stdlib.h>
-#include <processthreadsapi.h>
-#include <cstdlib>
-#include <string>
 
 gw2al_core_vtable* gAPI;
 gw2al_addon_dsc  gAddonDsc = { L"gw2_steam_runner", L"Tells Steam Guild Wars 2 is running.", 0, 1, 1, NULL };
@@ -19,19 +14,27 @@ gw2al_api_ret gw2addon_unload(int gameExiting) {
     return GW2AL_OK;
 }
 
+std::wstring appid_path = L"\\addons\\gw2_steam_runner\\appid.cfg";
+std::wstring idle_path = L"\\addons\\gw2_steam_runner\\steam-idle\\steam-idle.exe";
 PROCESS_INFORMATION process_information;
 
 void startRunner() {
 
     // Get current working directory
-    TCHAR buffer[MAX_PATH];
-    DWORD len = GetCurrentDirectory(MAX_PATH, buffer);
-    // Locate steam-idle executable in addon directory
+    TCHAR current_dir[MAX_PATH];
+    DWORD len = GetCurrentDirectory(MAX_PATH, current_dir);
+
+    // Load config
+    std::ifstream ifs(current_dir + appid_path);
+    std::string appid((std::istreambuf_iterator<char>(ifs)),
+        (std::istreambuf_iterator<char>()));
+    std::wstring appidw(appid.begin(), appid.end());
+    
+    // Formulate steam-idle command
     std::wstring quote = L"\"";
-    std::wstring arg = L" 1284210";
-    std::wstring relative = L"\\addons\\gw2_steam_runner\\steam-idle\\steam-idle.exe";
-    std::wstring working = buffer;
-    std::wstring exec = buffer + relative;
+    std::wstring arg = ((std::wstring)L" ") + appidw;
+    std::wstring working = current_dir;
+    std::wstring exec = current_dir + idle_path;
     std::wstring cmd = quote + exec + quote + arg;
 
     // Start the steam-idle process
