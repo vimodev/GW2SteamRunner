@@ -4,7 +4,17 @@ GW2 Steam Runner tells Steam that Guild Wars 2 is running as if it were the Stea
 
 ## Install
 - Install [GW2 Addon Manager](https://github.com/gw2-addon-loader/GW2-Addon-Manager)
-- Extract the latest release .zip to <your install folder>\addons (e.g. C:\Program Files\Guild Wars 2\addons)
+- Extract the latest release .zip to <your install folder>\addons (e.g. C:\Program Files\Guild Wars 2\addons) such that the folder structure looks like:
+```
+Guild Wars 2
+├───addons
+|   ├───gw2_steam_runner
+|   |       appid.cfg
+|   |       gw2addon_gw2_steam_runner.dll
+|   |       steam_api64.dll
+|   └───<other addons>
+└───<game files>
+```
 
 
 ## Requirements
