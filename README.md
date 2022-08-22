@@ -19,4 +19,4 @@ Guild Wars 2
 
 ## Requirements
 - Steam must be running
-- The logged in Steam account must have Guild Wars 2 in their Steam account library (can be added for free via the [Steam store page](https://store.steampowered.com/app/1284210/Guild_Wars_2/))
+- The logged in Steam account must have Guild Wars 2 in their Steam account library (can be added for free via the [Steam store page](https://store.steampowered.com/app/1284210/Guild_Wars_2/)) IT DOES NOT HAVE TO BE INSTALLED.
