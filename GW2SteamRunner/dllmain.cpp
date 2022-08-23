@@ -3,7 +3,7 @@
 #include <future>
 
 // GW2 Addon loader stuff
-gw2al_addon_dsc  gAddonDsc = { L"gw2_steam_runner", L"Tells Steam Guild Wars 2 is running.", 0, 1, 1, NULL };
+gw2al_addon_dsc  gAddonDsc = { L"gw2_steam_runner", L"Tells Steam Guild Wars 2 is running.", 1, 0, 0, NULL };
 gw2al_addon_dsc* gw2addon_get_description() { return &gAddonDsc; }
 gw2al_api_ret gw2addon_load(gw2al_core_vtable* core_api) { return GW2AL_OK; }
 gw2al_api_ret gw2addon_unload(int gameExiting) { return GW2AL_OK; }
