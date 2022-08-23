@@ -3,8 +3,9 @@
 GW2 Steam Runner tells Steam that Guild Wars 2 is running as if it were the Steam edition from the Steam store. This helps keep Steam player counts and engagement up. Unfortunately Steam player counts have increasingly influenced player's decisions in which game they might try out. Therefore it is important that Guild Wars 2's player base appears as healthy as it really is, Steam edition or not.
 
 ## Features
-- Tells Steam you are playing Guild Wars 2, thus accumulating Steam play time and contributing to Steam player counts.
-- Allows for opening of Steam in-game overlay (shift+tab by default)
+1. Tells Steam you are playing Guild Wars 2, thus accumulating Steam play time and contributing to Steam player counts.
+2. Allows for opening of Steam in-game overlay (shift+tab by default)
+   - Can be turned off in Steam Library (Guild Wars 2 Right Click > Properties... > Enable the Steam Overlay while in-game)
 
 ## Install
 - Install [GW2 Addon Manager](https://github.com/gw2-addon-loader/GW2-Addon-Manager)
